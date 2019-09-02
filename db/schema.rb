@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_01_204228) do
+ActiveRecord::Schema.define(version: 2019_09_02_085108) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,6 +21,17 @@ ActiveRecord::Schema.define(version: 2019_09_01_204228) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "orders", force: :cascade do |t|
+    t.integer "amount_cents", default: 0, null: false
+    t.string "teddy_sku"
+    t.bigint "user_id"
+    t.string "state"
+    t.json "payment"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_orders_on_user_id"
+  end
+
   create_table "teddies", force: :cascade do |t|
     t.string "sku"
     t.string "name"
@@ -28,6 +39,7 @@ ActiveRecord::Schema.define(version: 2019_09_01_204228) do
     t.string "photo_url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "price_cents", default: 0, null: false
     t.index ["category_id"], name: "index_teddies_on_category_id"
   end
 
@@ -43,5 +55,6 @@ ActiveRecord::Schema.define(version: 2019_09_01_204228) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "orders", "users"
   add_foreign_key "teddies", "categories"
 end
